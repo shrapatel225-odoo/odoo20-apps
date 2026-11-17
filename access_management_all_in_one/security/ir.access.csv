@@ -1,0 +1,9 @@
+id,name,model_id,group_id/id,operation,domain
+access_access_profile_manager,access.profile manager,access.profile,group_access_suite_manager,crud,
+access_access_profile_model_manager,access.profile.model manager,access.profile.model,group_access_suite_manager,crud,
+access_access_profile_field_manager,access.profile.field manager,access.profile.field,group_access_suite_manager,crud,
+access_access_profile_domain_manager,access.profile.domain manager,access.profile.domain,group_access_suite_manager,crud,
+access_access_profile_element_manager,access.profile.element manager,access.profile.element,group_access_suite_manager,crud,
+access_access_ui_element_manager,access.ui.element manager,access.ui.element,group_access_suite_manager,crud,
+access_access_view_type_manager,access.view.type manager,access.view.type,group_access_suite_manager,crud,
+access_access_view_type_user,access.view.type user,access.view.type,base.group_user,r,

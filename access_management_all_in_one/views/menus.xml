@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_access_suite_root"
+              name="Access Management"
+              web_icon="access_management_all_in_one,static/description/icon.png"
+              groups="group_access_suite_manager"
+              sequence="95"/>
+
+    <menuitem id="menu_access_profile"
+              name="Access Profiles"
+              parent="menu_access_suite_root"
+              action="action_access_profile"
+              sequence="10"/>
+
+    <menuitem id="menu_access_suite_config"
+              name="Configuration"
+              parent="menu_access_suite_root"
+              sequence="90"/>
+
+    <menuitem id="menu_access_ui_element"
+              name="UI Elements"
+              parent="menu_access_suite_config"
+              action="action_access_ui_element"
+              sequence="10"/>
+
+    <!-- shortcut in Settings > Users & Companies -->
+    <menuitem id="menu_access_profile_settings"
+              name="Access Profiles"
+              parent="base.menu_users"
+              action="action_access_profile"
+              groups="group_access_suite_manager"
+              sequence="30"/>
+</odoo>

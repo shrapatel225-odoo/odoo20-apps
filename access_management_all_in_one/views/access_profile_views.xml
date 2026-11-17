@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Rule line sub-forms -->
+    <record id="access_profile_model_view_form" model="ir.ui.view">
+        <field name="name">access.profile.model.form</field>
+        <field name="model">access.profile.model</field>
+        <field name="arch" type="xml">
+            <form string="Model Rule">
+                <sheet>
+                    <group>
+                        <field name="model_id" options="{'no_create': True}"/>
+                        <field name="model_name" invisible="1"/>
+                    </group>
+                    <group>
+                        <group string="Access Rights">
+                            <field name="readonly"/>
+                            <field name="no_create" readonly="readonly"/>
+                            <field name="no_write" readonly="readonly"/>
+                            <field name="no_unlink" readonly="readonly"/>
+                        </group>
+                        <group string="Action Menu">
+                            <field name="no_duplicate"/>
+                            <field name="no_archive"/>
+                            <field name="no_export"/>
+                            <field name="no_import"/>
+                            <field name="no_spreadsheet"/>
+                        </group>
+                        <group string="Chatter">
+                            <field name="hide_chatter"/>
+                            <field name="hide_send_message" invisible="hide_chatter"/>
+                            <field name="hide_log_note" invisible="hide_chatter"/>
+                            <field name="hide_activity" invisible="hide_chatter"/>
+                        </group>
+                        <group string="Views">
+                            <field name="hide_searchpanel"/>
+                            <field name="view_type_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Print &amp; Actions" invisible="not model_id">
+                        <field name="report_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="action_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="access_profile_field_view_form" model="ir.ui.view">
+        <field name="name">access.profile.field.form</field>
+        <field name="model">access.profile.field</field>
+        <field name="arch" type="xml">
+            <form string="Field Rule">
+                <sheet>
+                    <group>
+                        <field name="model_id" options="{'no_create': True}"/>
+                        <field name="field_ids" widget="many2many_tags" options="{'no_create': True}" invisible="not model_id"/>
+                    </group>
+                    <group>
+                        <group string="Behaviour">
+                            <field name="invisible"/>
+                            <field name="readonly"/>
+                            <field name="required"/>
+                        </group>
+                        <group string="Relational Fields">
+                            <field name="no_open"/>
+                            <field name="no_create"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="condition" placeholder="e.g. state in ('sale', 'done')"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="access_profile_domain_view_form" model="ir.ui.view">
+        <field name="name">access.profile.domain.form</field>
+        <field name="model">access.profile.domain</field>
+        <field name="arch" type="xml">
+            <form string="Record Rule">
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="e.g. Only my own sales orders"/>
+                        <field name="model_id" options="{'no_create': True}"/>
+                        <field name="model_name" invisible="1"/>
+                        <field name="domain" widget="domain" options="{'model': 'model_name', 'in_dialog': True}" invisible="not model_id"/>
+                    </group>
+                    <group string="Apply on">
+                        <group>
+                            <field name="perm_read"/>
+                            <field name="perm_write"/>
+                        </group>
+                        <group>
+                            <field name="perm_create"/>
+                            <field name="perm_unlink"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="access_profile_element_view_form" model="ir.ui.view">
+        <field name="name">access.profile.element.form</field>
+        <field name="model">access.profile.element</field>
+        <field name="arch" type="xml">
+            <form string="UI Element Rule">
+                <sheet>
+                    <group>
+                        <field name="model_id" options="{'no_create': True}"/>
+                        <field name="element_ids" widget="many2many_tags" options="{'no_create': True}" invisible="not model_id"/>
+                        <field name="extra_keys" placeholder="e.g. action_confirm, Other Info"/>
+                        <field name="condition" placeholder="e.g. state != 'draft'"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Profile -->
+    <record id="access_profile_view_form" model="ir.ui.view">
+        <field name="name">access.profile.form</field>
+        <field name="model">access.profile</field>
+        <field name="arch" type="xml">
+            <form string="Access Profile">
+                <header>
+                    <button name="action_scan_elements" type="object" string="Scan Views"
+                            class="btn-secondary"
+                            help="Collect buttons, tabs, links and filters of the models used in this profile."/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_users" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="user_count" widget="statinfo" string="Users"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Sales Users - Limited"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_ids" widget="many2many_tags_avatar" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="company_ids" widget="many2many_tags" options="{'no_create': True}"
+                                   groups="base.group_multi_company"/>
+                            <field name="sequence" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="User Settings" name="user_settings">
+                            <group>
+                                <group string="Security">
+                                    <field name="readonly_user"/>
+                                    <field name="readonly_allowed_model_ids" widget="many2many_tags"
+                                           options="{'no_create': True}" invisible="not readonly_user"/>
+                                    <field name="disable_debug"/>
+                                    <field name="disable_login"/>
+                                    <field name="block_rpc"/>
+                                    <field name="block_module_ops"/>
+                                </group>
+                                <group string="All Models">
+                                    <field name="hide_export_all"/>
+                                    <field name="hide_import_all"/>
+                                    <field name="hide_spreadsheet_all"/>
+                                    <field name="hide_chatter_all"/>
+                                    <field name="hide_send_message_all" invisible="hide_chatter_all"/>
+                                    <field name="hide_log_note_all" invisible="hide_chatter_all"/>
+                                    <field name="hide_activity_all" invisible="hide_chatter_all"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Menus" name="menus">
+                            <field name="hidden_menu_ids" options="{'no_create': True}">
+                                <list>
+                                    <field name="complete_name" string="Menu"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Models" name="models">
+                            <field name="model_line_ids">
+                                <list>
+                                    <field name="model_id"/>
+                                    <field name="readonly" optional="show"/>
+                                    <field name="no_create" optional="show"/>
+                                    <field name="no_write" optional="show"/>
+                                    <field name="no_unlink" optional="show"/>
+                                    <field name="no_duplicate" optional="hide"/>
+                                    <field name="no_archive" optional="hide"/>
+                                    <field name="no_export" optional="show"/>
+                                    <field name="no_import" optional="hide"/>
+                                    <field name="hide_chatter" optional="hide"/>
+                                    <field name="view_type_ids" widget="many2many_tags" optional="show"/>
+                                    <field name="report_ids" widget="many2many_tags" optional="show"/>
+                                    <field name="action_ids" widget="many2many_tags" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Fields" name="fields">
+                            <field name="field_line_ids">
+                                <list>
+                                    <field name="model_id"/>
+                                    <field name="field_ids" widget="many2many_tags"/>
+                                    <field name="invisible"/>
+                                    <field name="readonly"/>
+                                    <field name="required"/>
+                                    <field name="no_open" optional="show"/>
+                                    <field name="no_create" optional="show"/>
+                                    <field name="condition" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Records" name="records">
+                            <field name="domain_line_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="model_id"/>
+                                    <field name="domain"/>
+                                    <field name="perm_read"/>
+                                    <field name="perm_write"/>
+                                    <field name="perm_create"/>
+                                    <field name="perm_unlink"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Buttons, Tabs &amp; Filters" name="elements">
+                            <field name="element_line_ids">
+                                <list>
+                                    <field name="model_id"/>
+                                    <field name="element_ids" widget="many2many_tags"/>
+                                    <field name="extra_keys" optional="hide"/>
+                                    <field name="condition" optional="show"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="access_profile_view_list" model="ir.ui.view">
+        <field name="name">access.profile.list</field>
+        <field name="model">access.profile</field>
+        <field name="arch" type="xml">
+            <list string="Access Profiles">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="user_ids" widget="many2many_tags_avatar"/>
+                <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company" optional="show"/>
+                <field name="readonly_user" optional="show"/>
+                <field name="disable_login" optional="hide"/>
+                <field name="rule_count" optional="show"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="access_profile_view_search" model="ir.ui.view">
+        <field name="name">access.profile.search</field>
+        <field name="model">access.profile</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="user_ids"/>
+                <filter name="readonly" string="Read-only Users" domain="[('readonly_user', '=', True)]"/>
+                <filter name="login_disabled" string="Login Disabled" domain="[('disable_login', '=', True)]"/>
+                <separator/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_access_profile" model="ir.actions.act_window">
+        <field name="name">Access Profiles</field>
+        <field name="res_model">access.profile</field>
+        <field name="path">access-profiles</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first access profile</p>
+            <p>Group restrictions in a profile (menus, models, fields, records, buttons, tabs, chatter)
+               and assign it to one or more users.</p>
+        </field>
+    </record>
+</odoo>
